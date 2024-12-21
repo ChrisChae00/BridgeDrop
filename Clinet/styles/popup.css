@@ -1,0 +1,15 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+}
+#deviceList {
+  list-style-type: none;
+  padding: 0;
+}
+#deviceList li {
+  padding: 5px;
+  cursor: pointer;
+}
+#deviceList li:hover {
+  background-color: #f0f0f0;
+}
