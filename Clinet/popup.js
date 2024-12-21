@@ -9,15 +9,16 @@ async function generateQRCode() {
   const qrCanvas = document.getElementById("qrCodeCanvas");
   const pairingInfo = JSON.stringify({ peerId: localPeerId });
   await QRCode.toCanvas(qrCanvas, pairingInfo);
+  console.log("QR Code generated successfully");
 }
 
-// Handle incoming WebSocket messages
+// Handle WebSocket connection
 socket.onmessage = async (event) => {
   const data = JSON.parse(event.data);
 
   if (data.type === "connected") {
     localPeerId = data.peerId;
-    await generateQRCode(); // Generate QR code on connection
+    await generateQRCode();
   } else if (data.type === "devices") {
     updateDeviceList(data.devices);
   }
@@ -32,12 +33,11 @@ function updateDeviceList(devices) {
     listItem.textContent = `Device: ${device.peerId}`;
     deviceList.appendChild(listItem);
 
-    // Add click-to-connect functionality
     listItem.addEventListener("click", () => connectToPeer(device.peerId));
   });
 }
 
-// Handle file selection and transfer
+// Handle file selection
 document.getElementById("fileInput").addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -45,41 +45,11 @@ document.getElementById("fileInput").addEventListener("change", (event) => {
   }
 });
 
-// Encrypt file data with a shared secret
-function encryptData(data, secretKey) {
-  const encoder = new TextEncoder();
-  const key = encoder.encode(secretKey);
-  const encrypted = data.map((byte, index) => byte ^ key[index % key.length]);
-  return encrypted;
-}
-
-// Send file to a peer
-function sendFile(file) {
-  const peerConnection = new RTCPeerConnection();
-  const dataChannel = peerConnection.createDataChannel("fileTransfer");
-
-  // Send file chunks via DataChannel
-  dataChannel.onopen = () => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const arrayBuffer = event.target.result;
-      const encryptedData = encryptData(
-        new Uint8Array(arrayBuffer),
-        "secretKey"
-      );
-      dataChannel.send(encryptedData);
-    };
-    reader.readAsArrayBuffer(file);
-  };
-
-  // Connect to the selected peer
-  peerConnection.createOffer().then((offer) => {
-    peerConnection.setLocalDescription(offer);
-    socket.send(JSON.stringify({ type: "offer", offer, targetPeerId }));
-  });
-}
-
-// Connect to a peer
+// Placeholder for peer connection logic
 function connectToPeer(peerId) {
-  // Placeholder for connection logic
+  console.log("Connecting to peer:", peerId);
+}
+
+function sendFile(file) {
+  console.log("Sending file:", file.name);
 }
