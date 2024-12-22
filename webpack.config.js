@@ -1,13 +1,14 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./Client/popup.js", // Entry file
+  entry: "./Client/popup.js",
   output: {
-    filename: "popup.bundle.js", // Output file name
-    path: path.resolve(__dirname, "Client"), // Output directory
+    filename: "popup.bundle.js",
+    path: path.resolve(__dirname, "Client"),
   },
-  mode: "development", // Set mode to 'development' for easier debugging
-  resolve: {
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"], // Ensure node_modules is resolved correctly
+  mode: "production", // Use production mode to avoid eval
+  devtool: false, // Disable source maps to eliminate eval from them
+  optimization: {
+    minimize: true, // Minimize the output
   },
 };
