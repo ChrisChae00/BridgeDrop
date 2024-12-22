@@ -5,6 +5,7 @@ const wss = new WebSocket.Server({ port: 8080 });
 const peers = new Map();
 
 wss.on("connection", (ws) => {
+  console.log("WebSocket connected.");
   const peerId = uuidv4();
   peers.set(peerId, ws);
 
