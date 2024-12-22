@@ -2,7 +2,6 @@ import QRCode from "qrcode";
 
 const socket = new WebSocket("ws://localhost:8080");
 let localPeerId = null;
-const peers = new Map();
 
 // Generate QR Code for pairing
 async function generateQRCode() {
