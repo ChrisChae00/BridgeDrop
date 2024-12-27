@@ -1,40 +1,32 @@
+const http = require("http");
 const WebSocket = require("ws");
-const { v4: uuidv4 } = require("uuid");
 
-const wss = new WebSocket.Server({ port: 8080 });
-const peers = new Map();
+const port = process.env.PORT || 8080; // Use Vercel's assigned port or default to 8080
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.end("<h1>BridgeDrop Server is Running!</h1>");
+});
+
+const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (ws) => {
   console.log("WebSocket connected.");
-  const peerId = uuidv4();
-  peers.set(peerId, ws);
-
-  // Send connected peer ID
-  ws.send(JSON.stringify({ type: "connected", peerId }));
 
   ws.on("message", (message) => {
-    const data = JSON.parse(message);
-
-    if (data.type === "discover") {
-      const devices = Array.from(peers.keys()).filter((id) => id !== peerId);
-      ws.send(JSON.stringify({ type: "devices", devices }));
-    } else if (data.type === "offer") {
-      const targetPeer = peers.get(data.targetPeerId);
-      if (targetPeer) {
-        targetPeer.send(
-          JSON.stringify({
-            type: "offer",
-            offer: data.offer,
-            fromPeerId: peerId,
-          })
-        );
+    console.log("Received:", message);
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message);
       }
-    }
+    });
   });
 
   ws.on("close", () => {
-    peers.delete(peerId);
+    console.log("WebSocket disconnected.");
   });
 });
 
-console.log("WebSocket server is running on ws://localhost:8080");
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

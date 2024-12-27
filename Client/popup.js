@@ -1,28 +1,56 @@
 import QRCode from "qrcode";
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Popup loaded. Generating QR Code...");
-  generateQRCode();
-});
+let uploadedFile = null; // To hold file information
 
-async function generateQRCode() {
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("fileInput");
   const qrCanvas = document.getElementById("qrCodeCanvas");
 
-  if (!qrCanvas) {
-    console.error("QR Code canvas element not found");
-    return;
-  }
+  fileInput.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      uploadedFile = file;
+      console.log(`File selected: ${file.name}, ${file.size} bytes`);
 
-  try {
-    const testData = "Hello, BridgeDrop!"; // Static data to test QR code generation
-    await QRCode.toCanvas(qrCanvas, testData, (error) => {
-      if (error) {
-        console.error("Error generating QR code:", error);
-      } else {
-        console.log("QR code generated successfully.");
-      }
-    });
-  } catch (error) {
-    console.error("Unexpected error during QR code generation:", error);
-  }
+      // Replace with your Vercel deployment URL
+      const serverURL =
+        "https://bridge-drop-h14c9sp3c-youngsu-chaes-projects.vercel.app";
+      const fileDetails = {
+        name: file.name,
+        size: file.size,
+        url: `${serverURL}/download/${file.name}`, // URL for file download
+      };
+
+      // Generate QR code with file details
+      await QRCode.toCanvas(qrCanvas, JSON.stringify(fileDetails), (error) => {
+        if (error) {
+          console.error("Error generating QR code:", error);
+        } else {
+          console.log("QR code generated successfully:", fileDetails);
+        }
+      });
+
+      // Send file to the server
+      uploadFileToServer(file, fileDetails, serverURL);
+    }
+  });
+});
+
+// Send the uploaded file to the server
+function uploadFileToServer(file, fileDetails, serverURL) {
+  const socket = new WebSocket(`${serverURL.replace("https", "wss")}`); // Use WebSocket URL
+  socket.onopen = () => {
+    console.log("WebSocket connection established. Sending file...");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const fileData = reader.result;
+      socket.send(JSON.stringify({ type: "file", fileDetails, fileData }));
+      console.log("File sent to the server.");
+    };
+    reader.readAsDataURL(file); // Convert file to Base64
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
 }

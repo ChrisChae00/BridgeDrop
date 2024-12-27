@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <link rel="stylesheet" href="styles/popup.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BridgeDrop</title>
 </head>
 
 <body>
     <h1>BridgeDrop</h1>
-    <p>Select a file to share:</p>
-    <input type="file" id="fileInput">
-    <h3>Nearby Devices:</h3>
-    <ul id="deviceList"></ul>
-    <h3>QR Code for Pairing:</h3>
+    <input type="file" id="fileInput" />
+    <h3>Scan this QR code to download the file:</h3>
     <canvas id="qrCodeCanvas"></canvas>
-    <!-- Use the bundled JavaScript -->
-    <script src="popup.bundle.js"></script>
+    <script src="popup.js"></script>
 </body>
 
 </html>
