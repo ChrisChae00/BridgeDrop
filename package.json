@@ -1,9 +1,12 @@
 {
-  "devDependencies": {
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
+  "name": "bridge-drop",
+  "version": "1.0.0",
+  "description": "Peer-to-peer file sharing using WebRTC and Firebase.",
+  "main": "popup.js",
+  "scripts": {
+    "start": "npx serve public"
   },
   "dependencies": {
-    "qrcode": "^1.5.4"
+    "firebase": "^9.23.0"
   }
 }
