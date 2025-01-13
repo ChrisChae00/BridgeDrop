@@ -1,14 +1,74 @@
+html,
 body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: Arial, sans-serif;
+}
+
+body {
   text-align: center;
-  padding: 20px;
 }
 
 .container {
-  max-width: 500px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-input[type="file"] {
-  margin: 20px 0;
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+#fileInput {
+  margin-bottom: 20px;
+}
+
+#generateQRButton {
+  margin-bottom: 20px;
+}
+
+#qrCanvas {
+  width: 100%;
+  max-width: 320px;
+  height: 320px;
+  margin: 0 auto;
+  border: 2px dashed #00cb1b; /* Add a dashed border */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#qrCanvas::before {
+  content: "QR Code will appear here";
+  color: #00cb1b;
+  font-size: 1em;
+  text-align: center;
+  position: absolute;
 }

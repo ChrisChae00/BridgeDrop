@@ -4,18 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeDrop</title>
+    <title>BridgeDrop File Sharing</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-storage.js"></script>
+    <!-- QRCode CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <h1>BridgeDrop</h1>
-        <input type="file" id="fileInput" />
-        <h3>Generated QR Code:</h3>
-        <canvas id="qrCodeCanvas"></canvas>
+        <h1>BridgeDrop File Upload</h1>
+        <!-- File Input -->
+        <input type="file" id="fileInput" multiple />
+        <!-- Generate QR Code Button -->
+        <button id="generateQRButton" disabled>Generate QR Code</button>
+        <!-- QR Code Display -->
+        <div id="qrCanvas" style="width: 320px; height: 320px;"></div> <!-- Ensure canvas is large enough -->
     </div>
-    <script src="qrcode.min.js"></script>
     <script type="module" src="app.js"></script>
 </body>
 
